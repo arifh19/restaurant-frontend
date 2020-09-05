@@ -1,0 +1,81 @@
+<template>
+  <div>
+    <header class="head-container">
+      <img src="@/assets/menu.png" class="burger-menu" alt="menu" />
+      <h1>{{ title }}</h1>
+      <input v-if="search" type="text" class="search-focus" name="" placeholder="search here...">
+      <img v-if="!search">
+    </header>
+  </div>
+</template>
+
+<script>
+  export default {
+      name: 'Header',
+      props: {
+        search: {
+          type: Boolean,
+          required: true,
+        },
+        title: {
+          type: String,
+          required: true,
+        },
+    },
+  };
+</script>
+
+<style scoped>
+  header {
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    border: 1px solid #cecece;
+    height: 60px;
+  }
+
+  .head-container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .head-container .burger-menu {
+    cursor: pointer;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 25px;
+    width: 26px;
+    height: 25px;
+  }
+
+  .head-container .search-focus {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 10px;
+    background: url(http://www.iconsdb.com/icons/preview/black/search-12-xxl.png) no-repeat left;
+    border: 0.1px solid #ccc;
+    outline: none;
+    background-size: 22px;
+    background-position: 11px;
+    border-radius: 50px;
+    width: 42px;
+    height: 42px;
+    padding: 21px;
+    transition: all .5s;
+  }
+  .search-focus:focus {
+      width: 200px;
+      padding-left: 50px;
+  }
+  .head-container h1 {
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 30px;
+  }
+   @media only screen and (max-width: 859px) {
+    .head-container h1 {
+      font-size: 24px;
+    }
+  }
+
+</style>
