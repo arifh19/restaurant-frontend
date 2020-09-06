@@ -10,19 +10,6 @@
   export default {
     name: "App",
     components: {},
-    methods: {
-      showModal() {
-        this.$refs["my-modal"].show();
-      },
-      hideModal() {
-        this.$refs["my-modal"].hide();
-      },
-      toggleModal() {
-        // We pass the ID of the button that we want to return focus to
-        // when the modal has hidden
-        this.$refs["my-modal"].toggle("#toggle-btn");
-      },
-    },
   };
 </script>
 <style>
@@ -177,12 +164,12 @@
   }
   .flex-column {
     display: flex;
-    height: 85%;
+    height: 100%;
     justify-content: space-between;
   }
 
   .cart-item {
-    height: 80%;
+    height: 100%;
   }
   .cart-checkout {
     height: 10%;
@@ -203,27 +190,7 @@
     background: #f24f8a;
   }
 
-  .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-  }
-  /* Modal Content/Box */
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 40%;
 
-    /* Could be more or less, depending on screen size */
-  }
   .right {
     text-align: right;
   }
@@ -386,9 +353,6 @@
     }
     .nominal {
       font-size: 14px;
-    }
-    .modal-content {
-      width: 80%;
     }
   }
 

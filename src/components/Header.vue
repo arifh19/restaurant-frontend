@@ -1,10 +1,12 @@
 <template>
   <div>
     <header class="head-container">
-      <img src="@/assets/menu.png" class="burger-menu" alt="menu" />
-      <h1>{{ title }}</h1>
-      <input v-if="search" type="text" class="search-focus" name="" placeholder="search here...">
-      <img v-if="!search">
+      <img v-if="!isCart" src="@/assets/menu.png" class="burger-menu" alt="menu" />
+      <img v-if="isCart">
+      <h1 v-if="!isCart">{{ title }}</h1>
+      <h1 v-if="isCart">{{ title }} <span class="jumlah-cart"><p>{{ totalCart }}</p></span></h1>
+      <input v-if="search && !isCart" type="text" class="search-focus" name="" placeholder="search here...">
+      <img v-if="!search || isCart">
     </header>
   </div>
 </template>
@@ -15,11 +17,21 @@
       props: {
         search: {
           type: Boolean,
-          required: true,
+          required: false,
+          default : false
         },
         title: {
           type: String,
           required: true,
+        },
+        isCart: {
+          type: Boolean,
+          required: false,
+          default : false
+        },
+        totalCart: {
+          type: Number,
+          required: false,
         },
     },
   };
@@ -52,7 +64,7 @@
     margin-top: auto;
     margin-bottom: auto;
     margin-right: 10px;
-    background: url(http://www.iconsdb.com/icons/preview/black/search-12-xxl.png) no-repeat left;
+    background: url('../assets/search.png') no-repeat left;
     border: 0.1px solid #ccc;
     outline: none;
     background-size: 22px;

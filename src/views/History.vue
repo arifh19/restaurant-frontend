@@ -1,7 +1,7 @@
 <template>
   <div class="history">
     <main>
-     <Header title="History" :search="false"/>
+     <Header title="History"/>
       <div class="main">
         <SideBar />
         <main class="content-history table-responsive">
