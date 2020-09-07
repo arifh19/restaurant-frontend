@@ -33,10 +33,13 @@
           type: Number,
           required: false,
         },
+        data: {
+          type: Array,
+          required: false,
+        },
     },
     methods : {
       fetch (event) {
-        
         console.log(event.target.value)
       }
     }
