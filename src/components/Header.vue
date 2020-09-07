@@ -5,7 +5,7 @@
       <img v-if="isCart">
       <h1 v-if="!isCart">{{ title }}</h1>
       <h1 v-if="isCart">{{ title }} <span class="jumlah-cart"><p>{{ totalCart }}</p></span></h1>
-      <input v-if="search && !isCart" type="text" class="search-focus" name="" placeholder="search here...">
+      <input v-if="search && !isCart" type="text" class="search-focus" name="" placeholder="search here..."  @input="fetch">
       <img v-if="!search || isCart">
     </header>
   </div>
@@ -34,6 +34,12 @@
           required: false,
         },
     },
+    methods : {
+      fetch (event) {
+        
+        console.log(event.target.value)
+      }
+    }
   };
 </script>
 

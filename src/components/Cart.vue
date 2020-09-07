@@ -22,12 +22,12 @@
       </div>
     </div>
     <div class="cart-checkout">
-      <div class="cart-total"><span>Total :</span> <span>{{ toRupiah(total) }}*</span></div>
-      <p>*Belum termasuk ppn</p>
+      <div v-if="!checkout" class="cart-total"><span>Total :</span> <span>{{ toRupiah(total) }}*</span></div>
+      <p v-if="!checkout">*Belum termasuk ppn</p>
       <button v-b-modal.modal-1 class="btn btn-primary checkout-btn">Checkout</button>
       <button class="btn btn-danger cancel-btn" @click="clear" >Cancel</button>
     </div>
-    <b-modal id="modal-1" hide-footer hide-header>
+    <b-modal id="modal-1" @show="onCheckout()" @hidden="offCheckout()" hide-footer hide-header>
       <div class="row">
         <div class="col-6">
             <h4>Checkout</h4>
@@ -84,6 +84,7 @@
       data : () =>{
         return {
           btnPlus : true,
+          checkout : false
         }
       },
       methods : {
@@ -102,6 +103,12 @@
         },
         clear (){
           this.items.data = []
+        },
+        onCheckout (){
+          this.checkout = true
+        },
+        offCheckout (){
+          this.checkout = false
         }
     }, 
     computed : {

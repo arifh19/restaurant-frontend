@@ -41,9 +41,9 @@
     margin-left: 15px;
     cursor: pointer;
   }
-
+  
   .foods {
-    padding: 30px;
+    padding: 20px;
     background: rgba(190, 195, 202, 0.3);
     display: flex;
     flex-direction: row;

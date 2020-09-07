@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <aside class="left-side">
-      <Header title="Food Items" :search="true"/>
+      <Header title="Food Items" :search="true" />
       <div class="main">
         <SideBar />
         <Product :products="data" :items="item" />
@@ -11,13 +11,11 @@
       <Header title="Cart" :isCart="true" :totalCart="totalCart" />
       <main>
         <EmptyCart v-if="totalCart === 0" />
-        <div v-if="totalCart > 0" class="container flex-column" >
+        <div v-if="totalCart > 0" class="container flex-column">
           <Cart :items="item" />
         </div>
       </main>
     </aside>
-    <div>
-</div>
   </div>
 </template>
 
@@ -135,14 +133,14 @@
       price: 2000,
     },
   ];
-  
+
   const items = {
-    cashier : 'Arif Hidayat',
-    ppn : 0.1,
-    invoice : '#010410919',
-    data : [],
-    totalPrice : 0
-  }
+    cashier: "Arif Hidayat",
+    ppn: 0.1,
+    invoice: "#010410919",
+    data: [],
+    totalPrice: 0,
+  };
 
   export default {
     name: "Home",
@@ -153,11 +151,12 @@
       Cart,
       EmptyCart,
     },
-    
+
     data: () => {
       return {
         data: products,
-        item : items,
+        item: items,
+        
       };
     },
 
@@ -165,18 +164,18 @@
       getProduct() {},
     },
 
-    computed : {
-      totalCart: function () {
-        return this.item.data.length 
+    computed: {
+      totalCart: function() {
+        return this.item.data.length;
       },
-    }
+    },
   };
 </script>
 <style scoped>
-header {
+  header {
     padding-top: 1vh;
     padding-bottom: 1vh;
     border: 1px solid #cecece;
     height: 60px;
-}
+  }
 </style>
