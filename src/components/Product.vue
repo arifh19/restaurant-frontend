@@ -29,22 +29,26 @@
                 <template v-slot:button-content>
                   <b-icon icon="three-dots-vertical"></b-icon>
                 </template>
-                <b-dropdown-item v-b-modal.modal-edit>Edit</b-dropdown-item>
-                <b-dropdown-item>Delete</b-dropdown-item>
+                <b-dropdown-item v-b-modal.modal-edit @click="itemId = item.id"
+                  >Edit</b-dropdown-item
+                >
+                <b-dropdown-item @click="deleteProduct(item.id)"
+                  >Delete</b-dropdown-item
+                >
               </b-dropdown>
             </div>
           </div>
         </article>
       </div>
     </main>
-    <!-- <Modal /> -->
-    <ModalEdit />
+    <ModalEdit :id="itemId" :getProduct="getProduct" />
   </div>
 </template>
 
 <script>
   import ModalEdit from "@/components/ModalEdit";
   import defaultImg from "@/assets/null-image.jpg";
+  import axios from "axios";
 
   export default {
     name: "Product",
@@ -56,23 +60,38 @@
         type: Object,
         required: true,
       },
+      getProduct: {
+        type: Function,
+        required: false,
+      },
     },
     data: () => {
       return {
-        options: [
-          { value: null, text: "Please select some item" },
-          { value: "a", text: "This is First option" },
-          { value: "b", text: "Default Selected Option" },
-          { value: "c", text: "This is another option" },
-          { value: "d", text: "This one is disabled", disabled: true },
-        ],
         imgError: defaultImg,
+        itemId: null,
+        config: {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        },
       };
     },
     components: {
       ModalEdit,
     },
     methods: {
+      deleteProduct: async function(id) {
+        try {
+          const response = await axios.delete(
+            `http://127.0.0.1:13000/product/${id}`,
+            this.config
+          );
+          console.log(response);
+          this.getProduct();
+        } catch (error) {
+          console.error(error);
+        }
+      },
       imageUrlAlt(event) {
         event.target.src = this.imgError;
       },
@@ -101,13 +120,16 @@
       isCheck: function() {
         return (item) => this.items.data.find((index) => index.id === item.id);
       },
+      getId: function() {
+        return this.itemId;
+      },
     },
   };
 </script>
 
 <style scoped>
   img {
-    width: 230px;
-    height: 180px;
+    width: 250px;
+    height: 200px;
   }
 </style>

@@ -108,7 +108,7 @@
   export default {
     name: "Modal-Add",
     props: {
-      fetch: {
+      getProduct: {
         type: Function,
         required: false,
       },
@@ -136,7 +136,6 @@
         config: {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + localStorage.getItem("token"),
           },
         },
       };
@@ -155,10 +154,11 @@
           formData.append("category_id", this.category_id);
           const response = await axios.post(
             "http://127.0.0.1:13000/product",
-            formData
+            formData,
+            this.config
           );
           this.products = response.data.data;
-          this.fetch();
+          this.getProduct();
           this.$nextTick(() => {
             this.$bvModal.hide("modal-prevent-closing");
           });
@@ -186,24 +186,6 @@
         this.priceState = null;
         this.stockState = null;
         this.categoryState = null;
-      },
-      handleOk(bvModalEvt) {
-        // Prevent modal from closing
-        bvModalEvt.preventDefault();
-        // Trigger submit handler
-        this.addProduct();
-      },
-      handleSubmit() {
-        // Exit when the form isn't valid
-        if (!this.checkFormValidity()) {
-          return;
-        }
-        // Push the name to submitted names
-        this.submittedNames.push(this.name);
-        // Hide the modal manually
-        this.$nextTick(() => {
-          this.$bvModal.hide("modal-prevent-closing");
-        });
       },
       onFileChange(e) {
         var files = e.target.files || e.dataTransfer.files;

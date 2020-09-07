@@ -3,8 +3,8 @@
     <aside class="left-side">
       <Header title="Food Items" :search="true" :data="products" />
       <div class="main">
-        <SideBar :fetch="getProduct" />
-        <Product :products="products" :items="items" />
+        <SideBar :getProduct="getProduct" />
+        <Product :products="products" :items="items" :getProduct="getProduct" />
       </div>
     </aside>
     <aside class="right-side">

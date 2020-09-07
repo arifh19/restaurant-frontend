@@ -13,7 +13,7 @@
         </li>
       </ul>
     </aside>
-    <ModalAdd :fetch="fetch" />
+    <ModalAdd :getProduct="getProduct" />
   </div>
 </template>
 
@@ -22,7 +22,7 @@
   export default {
     name: "SideBar",
     props: {
-      fetch: {
+      getProduct: {
         type: Function,
         required: false,
       },
