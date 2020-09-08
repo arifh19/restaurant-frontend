@@ -1,7 +1,7 @@
 <template>
   <div class="history">
     <main>
-     <Header title="History"/>
+      <Header title="History" />
       <div class="main">
         <SideBar />
         <main class="content-history table-responsive">
@@ -26,7 +26,7 @@
             <h4>Revenue</h4>
             <img src="@/assets/grafik.png" alt="" />
           </div>
-          <Table />
+          <Table :histories="histories" />
         </main>
       </div>
     </main>
@@ -37,14 +37,34 @@
   import Header from "@/components/Header";
   import SideBar from "@/components/SideBar";
   import Table from "@/components/Table";
-
+  import axios from "axios";
   export default {
     name: "history",
-    components : {
+    components: {
       Header,
       SideBar,
-      Table
-    }
+      Table,
+    },
+    data: () => {
+      return {
+        histories: [],
+      };
+    },
+    mounted() {
+      this.getHistory();
+    },
+    methods: {
+      getHistory: async function() {
+        try {
+          const response = await axios.get(
+            `${process.env.VUE_APP_URL}/history`
+          );
+          this.histories = response.data.data;
+        } catch (error) {
+          console.error(error);
+        }
+      },
+    },
   };
 </script>
 

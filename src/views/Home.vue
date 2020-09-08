@@ -1,10 +1,10 @@
 <template>
   <div class="content">
     <aside class="left-side">
-      <Header title="Food Items" :search="true" :data="products" />
+      <Header title="Food Items" :search="true" />
       <div class="main">
         <SideBar :getProduct="getProduct" />
-        <Product :products="products" :items="items" :getProduct="getProduct" />
+        <Product :items="items" :getProduct="getProduct" />
       </div>
     </aside>
     <aside class="right-side">
@@ -42,7 +42,6 @@
 
     data: () => {
       return {
-        products: [],
         items: {
           cashier: cashier,
           ppn: 0.1,
@@ -52,9 +51,11 @@
         },
         config: {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         },
+        column: "",
+        sort: "",
       };
     },
     mounted() {
@@ -63,8 +64,13 @@
     methods: {
       getProduct: async function() {
         try {
-          const response = await axios.get("http://127.0.0.1:13000/product");
-          this.products = response.data.data;
+          const column = this.$store.getters.getColumn;
+          const sort = this.$store.getters.getSort;
+
+          const response = await axios.get(
+            `${process.env.VUE_APP_URL}/product?column=${column}&sort=${sort}`
+          );
+          this.$store.state.products = response.data.data;
         } catch (error) {
           console.error(error);
         }

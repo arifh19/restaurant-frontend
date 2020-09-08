@@ -24,6 +24,8 @@
   .content,
   .main {
     display: flex;
+    width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
     flex-direction: row;
@@ -41,10 +43,15 @@
     margin-left: 15px;
     cursor: pointer;
   }
-  
-  .foods {
-    padding: 20px;
+  .product {
     background: rgba(190, 195, 202, 0.3);
+    width: 100%;
+    height: 100%;
+  }
+  .foods {
+    padding: 30px;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -190,7 +197,6 @@
     background: #f24f8a;
   }
 
-
   .right {
     text-align: right;
   }
@@ -306,7 +312,9 @@
     border: 2px solid white;
     border-radius: 50%;
   }
-
+  .sort {
+    margin-right: 15px;
+  }
   @media only screen and (max-width: 859px) {
     .content {
       display: flex;

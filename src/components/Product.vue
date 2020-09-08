@@ -1,7 +1,24 @@
 <template>
-  <div>
-    <main class="foods">
-      <div v-for="item in products" :key="item.id">
+  <div class="product">
+    <div class="container mt-20">
+      <div class="row sort">
+        <div class="col-6"></div>
+        <div class="col-6 right">
+          <select name="" id="" @change="setColumn()" v-model="column">
+            <option value="id">Last Updated</option>
+            <option value="name">Name</option>
+            <option value="category">Category</option>
+            <option value="price">Price</option>
+          </select>
+          <select name="" id="" @change="setSort()" v-model="sort">
+            <option value="asc">ASC</option>
+            <option value="desc">DESC</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="foods">
+      <div v-for="item in dataProducts" :key="item.id">
         <article class="imageandtext image_grid ">
           <label>
             <img
@@ -40,7 +57,7 @@
           </div>
         </article>
       </div>
-    </main>
+    </div>
     <ModalEdit :id="itemId" :getProduct="getProduct" />
   </div>
 </template>
@@ -53,9 +70,6 @@
   export default {
     name: "Product",
     props: {
-      products: {
-        required: true,
-      },
       items: {
         type: Object,
         required: true,
@@ -69,6 +83,8 @@
       return {
         imgError: defaultImg,
         itemId: null,
+        column: "id",
+        sort: "desc",
         config: {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -80,10 +96,18 @@
       ModalEdit,
     },
     methods: {
+      setColumn() {
+        this.$store.state.column = this.column;
+        this.getProduct();
+      },
+      setSort() {
+        this.$store.state.sort = this.sort;
+        this.getProduct();
+      },
       deleteProduct: async function(id) {
         try {
           const response = await axios.delete(
-            `http://127.0.0.1:13000/product/${id}`,
+            `${process.env.VUE_APP_URL}/product/${id}`,
             this.config
           );
           console.log(response);
@@ -123,13 +147,16 @@
       getId: function() {
         return this.itemId;
       },
+      dataProducts() {
+        return this.$store.getters.dataProducts;
+      },
     },
   };
 </script>
 
-<style scoped>
-  img {
-    width: 250px;
-    height: 200px;
+<style>
+  .foods img {
+    width: 280px;
+    height: 230px;
   }
 </style>

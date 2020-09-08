@@ -99,6 +99,7 @@
 </template>
 
 <script>
+  import axios from "axios";
   export default {
     name: "Item",
     props: {
@@ -111,6 +112,16 @@
       return {
         btnPlus: true,
         checkout: false,
+        invoices: null,
+        cashier: null,
+        date: null,
+        orders: null,
+        totalAmount: null,
+        config: {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
       };
     },
     methods: {
@@ -143,10 +154,35 @@
       offCheckout() {
         this.checkout = false;
       },
+      storeHistory: async function() {
+        try {
+          const orders = this.items.data.reduce((prev, cur) => {
+            return prev + [cur.name, cur.amount + "x"].join(" ") + ", ";
+          }, "");
+          const date = new Date().toISOString();
+          this.date = date;
+          const totalAmount =
+            this.items.totalPrice + this.items.totalPrice * this.items.ppn;
+          let formData = new FormData();
+          formData.append("invoices", this.items.invoice);
+          formData.append("cashier", this.items.cashier);
+          formData.append("date", this.date);
+          formData.append("orders", orders);
+          formData.append("amount", totalAmount);
+          const response = await axios.post(
+            `${process.env.VUE_APP_URL}/history`,
+            formData,
+            this.config
+          );
+          console.log(response);
+          this.$bvModal.hide("modal-1");
+          this.clear();
+        } catch (error) {
+          console.error(error);
+        }
+      },
       printCheckout() {
-        this.$bvModal.hide();
-        this.$bvModal.hide("modal-1");
-        this.clear();
+        this.storeHistory();
       },
     },
     computed: {

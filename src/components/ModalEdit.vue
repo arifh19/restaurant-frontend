@@ -93,8 +93,17 @@
             v-model="category_id"
             :state="categoryState"
             required
-            :options="options"
-          ></b-form-select>
+          >
+            <b-form-select-option value="0"
+              >Please select a Category</b-form-select-option
+            >
+            <b-form-select-option
+              v-for="option in options"
+              :key="option.id"
+              :value="option.id"
+              >{{ option.name }}</b-form-select-option
+            >
+          </b-form-select>
         </b-form-group>
       </form>
     </b-modal>
@@ -120,12 +129,7 @@
         category_id: null,
         attachment: null,
         submittedNames: [],
-        options: [
-          { value: 0, text: "Please select a Category", disabled: true },
-          { value: 1, text: "Makanan" },
-          { value: 2, text: "Minuman" },
-          { value: 3, text: "Snack" },
-        ],
+        options: null,
         config: {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -142,8 +146,21 @@
         required: false,
       },
     },
-
+    mounted() {
+      this.getCategory();
+    },
     methods: {
+      getCategory: async function() {
+        try {
+          const response = await axios.get(
+            `${process.env.VUE_APP_URL}/category`,
+            this.config
+          );
+          this.options = response.data.data;
+        } catch (error) {
+          console.error(error);
+        }
+      },
       editProduct: async function() {
         try {
           if (!this.checkFormValidity()) {
@@ -157,7 +174,7 @@
           formData.append("stock", this.stock);
           formData.append("category_id", this.category_id);
           const response = await axios.put(
-            "http://127.0.0.1:13000/product",
+            `${process.env.VUE_APP_URL}/product`,
             formData,
             this.config
           );
@@ -181,8 +198,9 @@
       },
       showProduct: async function() {
         try {
+          this.getCategory();
           const response = await axios.get(
-            `http://127.0.0.1:13000/product/${this.id}`,
+            `${process.env.VUE_APP_URL}/product/${this.id}`,
             this.config
           );
           this.name = response.data.data.name;
