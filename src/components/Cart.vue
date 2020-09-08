@@ -177,6 +177,7 @@
           console.log(response);
           this.$bvModal.hide("modal-1");
           this.clear();
+          this.$router.push({ name: "history" });
         } catch (error) {
           console.error(error);
         }

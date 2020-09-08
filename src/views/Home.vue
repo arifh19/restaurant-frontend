@@ -71,6 +71,7 @@
             `${process.env.VUE_APP_URL}/product?column=${column}&sort=${sort}`
           );
           this.$store.state.products = response.data.data;
+          console.log(this.$router.path);
         } catch (error) {
           console.error(error);
         }

@@ -176,6 +176,7 @@
             this.config
           );
           console.log(response);
+          this.$router.push({ name: "home" });
           this.getProduct();
           this.$nextTick(() => {
             this.$bvModal.hide("modal-prevent-closing");
