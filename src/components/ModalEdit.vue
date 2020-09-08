@@ -179,6 +179,7 @@
             this.config
           );
           this.products = response.data.data;
+          alert(response.data.message);
           this.getProduct();
           this.$nextTick(() => {
             this.$bvModal.hide("modal-prevent-closing");

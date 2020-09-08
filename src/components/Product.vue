@@ -110,6 +110,7 @@
             `${process.env.VUE_APP_URL}/product/${id}`,
             this.config
           );
+          alert(response.data.message);
           console.log(response);
           this.getProduct();
         } catch (error) {
