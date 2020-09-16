@@ -74,7 +74,6 @@
             this.config
           );
           this.$store.state.products = response.data.data;
-          console.log(this.$router.path);
         } catch (error) {
           console.error(error);
         }

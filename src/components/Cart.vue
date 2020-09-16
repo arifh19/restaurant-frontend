@@ -173,12 +173,12 @@
           formData.append("date", this.date);
           formData.append("orders", orders);
           formData.append("amount", totalAmount);
-          const response = await axios.post(
+          await axios.post(
             `${process.env.VUE_APP_URL}/history`,
             formData,
             this.config
           );
-          console.log(response);
+          
           this.$bvModal.hide("modal-1");
           this.clear();
           this.$router.push({ name: "history" });

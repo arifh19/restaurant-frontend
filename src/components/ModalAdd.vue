@@ -177,7 +177,6 @@
             formData,
             this.config
           );
-          console.log(response);
           alert(response.data.message);
           this.$router.push({ name: "home" });
           this.getProduct();
