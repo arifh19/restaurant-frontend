@@ -133,6 +133,8 @@
         config: {
           headers: {
             "Content-Type": "multipart/form-data",
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlX3Rva2VuIjoiYWNjZXNzIiwidXVpZCI6ImQ4OTg1YzY2LTA2MGItNDdiZC1iNzJkLWRmMWE0YmU0NDcwOCIsImlhdCI6MTYwMDEzMTM0MiwiZXhwIjoxNjAwMTM0OTQyfQ.aCTcYb3cOEcNNaCKqkN584gf1qCXu6_qJDdzNSUtwPY",
+
           },
         },
       };
@@ -197,6 +199,9 @@
         this.categoryState = valid;
         return valid;
       },
+      showImage (image){
+        return `${process.env.VUE_APP_URL}${image}`
+      },
       showProduct: async function() {
         try {
           this.getCategory();
@@ -205,7 +210,7 @@
             this.config
           );
           this.name = response.data.data.name;
-          this.image = response.data.data.image;
+          this.image = this.showImage(response.data.data.image)
           this.stock = response.data.data.stock;
           this.price = response.data.data.price;
           this.category_id = response.data.data.category_id;

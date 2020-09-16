@@ -22,7 +22,7 @@
         <article class="imageandtext image_grid ">
           <label>
             <img
-              :src="item.image"
+              :src="showImage(item.image)"
               :alt="item.name"
               @error="imageUrlAlt"
               @click="addCart(item, isCheck(item))"
@@ -88,6 +88,7 @@
         config: {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlX3Rva2VuIjoiYWNjZXNzIiwidXVpZCI6ImQ4OTg1YzY2LTA2MGItNDdiZC1iNzJkLWRmMWE0YmU0NDcwOCIsImlhdCI6MTYwMDEzMTM0MiwiZXhwIjoxNjAwMTM0OTQyfQ.aCTcYb3cOEcNNaCKqkN584gf1qCXu6_qJDdzNSUtwPY",
           },
         },
       };
@@ -139,6 +140,9 @@
           );
           this.items.data.splice(findIndex, 1);
         }
+      },
+      showImage (image){
+        return `${process.env.VUE_APP_URL}/public/upload/${image}`
       },
     },
     computed: {

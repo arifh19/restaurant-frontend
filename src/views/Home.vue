@@ -52,6 +52,8 @@
         config: {
           headers: {
             "Content-Type": "multipart/form-data",
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlX3Rva2VuIjoiYWNjZXNzIiwidXVpZCI6ImQ4OTg1YzY2LTA2MGItNDdiZC1iNzJkLWRmMWE0YmU0NDcwOCIsImlhdCI6MTYwMDEzMTM0MiwiZXhwIjoxNjAwMTM0OTQyfQ.aCTcYb3cOEcNNaCKqkN584gf1qCXu6_qJDdzNSUtwPY",
+
           },
         },
         column: "",
@@ -68,7 +70,8 @@
           const sort = this.$store.getters.getSort;
 
           const response = await axios.get(
-            `${process.env.VUE_APP_URL}/product?column=${column}&sort=${sort}`
+            `${process.env.VUE_APP_URL}/product?column=${column}&sort=${sort}`,
+            this.config
           );
           this.$store.state.products = response.data.data;
           console.log(this.$router.path);
