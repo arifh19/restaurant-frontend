@@ -200,7 +200,7 @@
         return valid;
       },
       showImage (image){
-        return `${process.env.VUE_APP_URL}${image}`
+        return `${process.env.VUE_APP_URL}/api/public/upload/${image}`
       },
       showProduct: async function() {
         try {
