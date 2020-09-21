@@ -147,7 +147,7 @@
         }
       },
       showImage (image){
-        return `${process.env.VUE_STATIC_URL}/public/upload/${image}`
+        return `${process.env.VUE_APP_URL}/public/upload/${image}`
       },
       clear() {
         this.items.data = [];
