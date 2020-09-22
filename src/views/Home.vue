@@ -25,7 +25,7 @@
   import Product from "@/components/Product";
   import Cart from "@/components/Cart";
   import EmptyCart from "@/components/EmptyCart";
-  import axios from "axios";
+  import { getAPI } from "../api";
 
   let cashier = "Arif Hidayat";
   let invoices = "#010410919";
@@ -49,13 +49,6 @@
           data: [],
           totalPrice: 0,
         },
-        config: {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlX3Rva2VuIjoiYWNjZXNzIiwidXVpZCI6ImQ4OTg1YzY2LTA2MGItNDdiZC1iNzJkLWRmMWE0YmU0NDcwOCIsImlhdCI6MTYwMDEzMTM0MiwiZXhwIjoxNjAwMTM0OTQyfQ.aCTcYb3cOEcNNaCKqkN584gf1qCXu6_qJDdzNSUtwPY",
-
-          },
-        },
         column: "",
         sort: "",
       };
@@ -68,18 +61,24 @@
         try {
           const column = this.$store.getters.getColumn;
           const sort = this.$store.getters.getSort;
-
-          const response = await axios.get(
-            `${process.env.VUE_APP_URL}/product?column=${column}&sort=${sort}`,
-            this.config
+          this.$store.state.APIUrl = `/product?column=${column}&sort=${sort}`
+          const response = await getAPI.get(
+            this.$store.state.APIUrl,
+            {
+              headers: {
+                Authorization: `Bearer ` + localStorage.getItem("access_token"),
+              },
+            }
           );
           this.$store.state.products = response.data.data;
         } catch (error) {
-          console.error(error);
+          if (error.response.status === 404 || error.response.status === 500) {
+            console.log("Error! Koneksi ke server bermasalah");
+          }
+          console.log(error);
         }
       },
     },
-
     computed: {
       totalCart: function() {
         return this.items.data.length;

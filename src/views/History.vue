@@ -26,7 +26,7 @@
             <h4>Revenue</h4>
             <img src="@/assets/grafik.png" alt="" />
           </div>
-          <Table :histories="histories" />
+          <Table :histories="dataHistories" />
         </main>
       </div>
     </main>
@@ -37,7 +37,7 @@
   import Header from "@/components/Header";
   import SideBar from "@/components/SideBar";
   import Table from "@/components/Table";
-  import axios from "axios";
+  import { getAPI } from "../api";
   export default {
     name: "history",
     components: {
@@ -56,14 +56,25 @@
     methods: {
       getHistory: async function() {
         try {
-          const response = await axios.get(
-            `${process.env.VUE_APP_URL}/history`
+          this.$store.state.APIUrl = `/history`
+          const response = await getAPI.get(
+            this.$store.state.APIUrl,
+            {
+              headers: {
+                Authorization: `Bearer ` + localStorage.getItem("access_token"),
+              },
+            }
           );
-          this.histories = response.data.data;
+          this.$store.state.histories = response.data.data;
         } catch (error) {
           console.error(error);
         }
       },
+    },
+    computed: {
+      dataHistories() {
+        return this.$store.getters.dataHistories;
+      }
     },
   };
 </script>

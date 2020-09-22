@@ -5,7 +5,6 @@
       ref="modal"
       title="Add Item"
       @show="resetModal"
-      @hidden="resetModal"
       @ok="addProduct"
       ok-title="Add"
     >
@@ -99,7 +98,7 @@
               >Please select a Category</b-form-select-option
             >
             <b-form-select-option
-              v-for="option in options"
+              v-for="option in APIDataCategory"
               :key="option.id"
               :value="option.id"
               >{{ option.name }}</b-form-select-option
@@ -112,8 +111,7 @@
 </template>
 
 <script>
-  import axios from "axios";
-
+  import { getCategory, postAPI } from "../api";
   export default {
     name: "Modal-Add",
     props: {
@@ -137,52 +135,40 @@
         attachment: null,
         submittedNames: [],
         options: null,
-        config: {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlX3Rva2VuIjoiYWNjZXNzIiwidXVpZCI6ImQ4OTg1YzY2LTA2MGItNDdiZC1iNzJkLWRmMWE0YmU0NDcwOCIsImlhdCI6MTYwMDEzMTM0MiwiZXhwIjoxNjAwMTM0OTQyfQ.aCTcYb3cOEcNNaCKqkN584gf1qCXu6_qJDdzNSUtwPY",
-
-          },
-        },
       };
-    },
-    mounted() {
-      this.getCategory();
     },
     methods: {
       getCategory: async function() {
         try {
-          const response = await axios.get(
-            `${process.env.VUE_APP_URL}/category`,
-            this.config
-          );
-          this.options = response.data.data;
+          const response = await getCategory.get('/category', {headers: {Authorization:`Bearer ` + localStorage.getItem("access_token")}})
+          this.$store.state.APIDataCategory = response.data.data;
         } catch (error) {
-          console.error(error);
+          if (error.response.status === 404 || error.response.status === 500) {
+                console.log("Error! Koneksi ke server bermasalah");
+            }
+            console.log(error)
         }
       },
-      addProduct: async function() {
+      addProduct: async function(bvModalEvt) {
         try {
           if (!this.checkFormValidity()) {
+            bvModalEvt.preventDefault()
             return;
           }
-          let formData = new FormData();
-          formData.append("name", this.name);
-          formData.append("image", this.attachment);
-          formData.append("price", this.price);
-          formData.append("stock", this.stock);
-          formData.append("category_id", this.category_id);
-          const response = await axios.post(
-            `${process.env.VUE_APP_URL}/product`,
-            formData,
-            this.config
-          );
-          alert(response.data.message);
-          this.$router.push({ name: "home" });
+          this.$store.state.APIUrl = `/product`
+          this.$store.state.formData = new FormData();
+          this.$store.state.formData.append("name", this.name);
+          this.$store.state.formData.append("image", this.attachment);
+          this.$store.state.formData.append("price", this.price);
+          this.$store.state.formData.append("stock", this.stock);
+          this.$store.state.formData.append("category_id", this.category_id);
+          const response = await postAPI.post('/product', this.$store.state.formData, {headers: {Authorization: 'Bearer '+ localStorage.getItem("access_token")}} )
           this.getProduct();
           this.$nextTick(() => {
             this.$bvModal.hide("modal-prevent-closing");
           });
+          alert(response.data.message);
+          this.$router.push({ name: "home" });
         } catch (error) {
           console.error(error);
         }
@@ -227,6 +213,11 @@
         this.image = "";
       },
     },
+    computed : {
+      APIDataCategory() {
+        return this.$store.getters.APIDataCategory;
+      },
+    }
   };
 </script>
 

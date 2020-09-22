@@ -65,7 +65,7 @@
 <script>
   import ModalEdit from "@/components/ModalEdit";
   import defaultImg from "@/assets/null-image.jpg";
-  import axios from "axios";
+  import { deleteAPI } from "../api";
 
   export default {
     name: "Product",
@@ -108,10 +108,12 @@
       },
       deleteProduct: async function(id) {
         try {
-          const response = await axios.delete(
-            `${process.env.VUE_APP_URL}/product/${id}`,
-            this.config
-          );
+          this.$store.state.APIUrlDelete = `/product/${id}`;
+          const response = await deleteAPI.delete(`/product/${id}`, {
+            headers: {
+              Authorization: `Bearer ` + localStorage.getItem("access_token"),
+            },
+          });
           alert(response.data.message);
           this.getProduct();
         } catch (error) {
@@ -142,7 +144,7 @@
         }
       },
       showImage(image) {
-        return `${process.env.VUE_APP_URL}/public/upload/${image}`;
+        return `${process.env.VUE_APP_STATIC_URL}${image}`;
       },
     },
     computed: {

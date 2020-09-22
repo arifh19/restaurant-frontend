@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { getAPI } from "../api";
 export default {
   name: "Header",
   props: {
@@ -47,28 +47,25 @@ export default {
       required: false,
     },
   },
-  data: () => {
-    return {
-      config: {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          access_token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlX3Rva2VuIjoiYWNjZXNzIiwidXVpZCI6ImQ4OTg1YzY2LTA2MGItNDdiZC1iNzJkLWRmMWE0YmU0NDcwOCIsImlhdCI6MTYwMDEzMTM0MiwiZXhwIjoxNjAwMTM0OTQyfQ.aCTcYb3cOEcNNaCKqkN584gf1qCXu6_qJDdzNSUtwPY",
-        },
-      },
-    };
-  },
   methods: {
     searchProduct: async function (event) {
       try {
         const name = event.target.value;
         let url;
         if (name !== "") {
-          url = `${process.env.VUE_APP_URL}/product/search/${name}`;
+          url = `/product/search/${name}`;
         } else {
-          url = `${process.env.VUE_APP_URL}/product`;
+          url = `/product`;
         }
-        const response = await axios.get(url, this.config);
+        this.$store.state.APIUrl = url
+        const response = await getAPI.get(
+          this.$store.state.APIUrl,
+          {
+            headers: {
+              Authorization: `Bearer ` + localStorage.getItem("access_token"),
+            },
+          }
+        );
         this.$store.state.products = response.data.data;
       } catch (error) {
         console.error(error);

@@ -98,7 +98,7 @@
               >Please select a Category</b-form-select-option
             >
             <b-form-select-option
-              v-for="option in options"
+              v-for="option in APIDataCategory"
               :key="option.id"
               :value="option.id"
               >{{ option.name }}</b-form-select-option
@@ -111,8 +111,7 @@
 </template>
 
 <script>
-  import axios from "axios";
-
+  import { putAPI, getEditAPI, getCategory } from "../api";
   export default {
     name: "Modal-Edit",
     data() {
@@ -129,14 +128,6 @@
         category_id: null,
         attachment: null,
         submittedNames: [],
-        options: null,
-        config: {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlX3Rva2VuIjoiYWNjZXNzIiwidXVpZCI6ImQ4OTg1YzY2LTA2MGItNDdiZC1iNzJkLWRmMWE0YmU0NDcwOCIsImlhdCI6MTYwMDEzMTM0MiwiZXhwIjoxNjAwMTM0OTQyfQ.aCTcYb3cOEcNNaCKqkN584gf1qCXu6_qJDdzNSUtwPY",
-
-          },
-        },
       };
     },
     props: {
@@ -148,44 +139,44 @@
         required: false,
       },
     },
-    mounted() {
-      this.getCategory();
-    },
     methods: {
       getCategory: async function() {
         try {
-          const response = await axios.get(
-            `${process.env.VUE_APP_URL}/category`,
-            this.config
-          );
-          this.options = response.data.data;
+          const response = await getCategory.get("/category", {
+            headers: {
+              Authorization: `Bearer ` + localStorage.getItem("access_token"),
+            },
+          });
+          this.$store.state.APIDataCategory = response.data.data;
         } catch (error) {
-          console.error(error);
+          if (error.response.status === 404 || error.response.status === 500) {
+            console.log("Error! Koneksi ke server bermasalah");
+          }
+          console.log(error);
         }
       },
-      editProduct: async function() {
+      editProduct: async function(bvModalEvt) {
         try {
           if (!this.checkFormValidity()) {
+            bvModalEvt.preventDefault()
             return;
           }
-          let formData = new FormData();
-          formData.append("id", this.id);
-          formData.append("name", this.name);
-          formData.append("image", this.attachment);
-          formData.append("price", this.price);
-          formData.append("stock", this.stock);
-          formData.append("category_id", this.category_id);
-          const response = await axios.put(
-            `${process.env.VUE_APP_URL}/product`,
-            formData,
-            this.config
-          );
-          this.products = response.data.data;
-          alert(response.data.message);
-          this.getProduct();
+          this.getCategory();
+          this.$store.state.APIUrl = `/product`
+          this.$store.state.formData = new FormData();
+          this.$store.state.formData.append("id", this.id);
+          this.$store.state.formData.append("name", this.name);
+          this.$store.state.formData.append("image", this.attachment);
+          this.$store.state.formData.append("price", this.price);
+          this.$store.state.formData.append("stock", this.stock);
+          this.$store.state.formData.append("category_id", this.category_id);
+          const response = await putAPI.put('/product', this.$store.state.formData, {headers: {Authorization: 'Bearer '+ localStorage.getItem("access_token")}} )
           this.$nextTick(() => {
             this.$bvModal.hide("modal-prevent-closing");
           });
+          alert(response.data.message);
+          this.getProduct();
+          
         } catch (error) {
           console.error(error);
         }
@@ -199,21 +190,27 @@
         this.categoryState = valid;
         return valid;
       },
-      showImage (image){
-        return `${process.env.VUE_APP_URL}/public/upload/${image}`
+      showImage(image) {
+        return `${process.env.VUE_APP_STATIC_URL}${image}`;
+      },
+      async getBase64(url) {
+        return await this.$http.get(url, { responseType: "arraybuffer" });
       },
       showProduct: async function() {
         try {
           this.getCategory();
-          const response = await axios.get(
-            `${process.env.VUE_APP_URL}/product/${this.id}`,
-            this.config
-          );
-          this.name = response.data.data.name;
-          this.image = this.showImage(response.data.data.image)
-          this.stock = response.data.data.stock;
-          this.price = response.data.data.price;
-          this.category_id = response.data.data.category_id;
+          const response = await getEditAPI.get(`/product/${this.id}`, {
+            headers: {
+              Authorization: `Bearer ` + localStorage.getItem("access_token"),
+            },
+          });
+          this.$store.state.APIShow = response.data.data[0];
+          this.name = this.$store.state.APIShow.name;
+          this.image = this.showImage(this.$store.state.APIShow.image);
+          this.stock = this.$store.state.APIShow.stock;
+          this.price = this.$store.state.APIShow.price;
+          this.category_id = this.$store.state.APIShow.category_id;
+    
         } catch (error) {
           console.error(error);
         }
@@ -234,6 +231,11 @@
 
       removeImage: function() {
         this.image = "";
+      },
+    },
+    computed: {
+      APIDataCategory() {
+        return this.$store.getters.APIDataCategory;
       },
     },
   };

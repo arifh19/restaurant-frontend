@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Login from '@/views/Login'
 import History from '@/views/History'
 
 import Home from '@/views/Home'
@@ -15,6 +16,11 @@ const routes = [{
     path: '/history',
     name: 'history',
     component: History
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
   },
 ]
 

@@ -11,6 +11,9 @@
         <li style="outline: none;" v-b-modal.modal-add>
           <img src="@/assets/add.png" alt="add" />
         </li>
+         <router-link :to="{ name: 'login' }"
+          ><li><img src="@/assets/logout.png"  alt="logout" /></li
+        ></router-link>
       </ul>
     </aside>
     <ModalAdd :getProduct="getProduct" />
