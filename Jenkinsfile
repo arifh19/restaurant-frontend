@@ -69,7 +69,7 @@ pipeline {
                                         sshTransfer(
                                             sourceFiles: "docker-compose.yml",
                                             remoteDirectory: "${REMOTE_DIR}",
-                                            execCommand: "docker-compose -f restaurant/docker-compose.yml stop; docker rm restaurant_frontend_1; docker rmi ${REPO}:${BRANCH_DEV}; docker-compose -f restaurant/docker-compose.yml up -d",
+                                            execCommand: "docker-compose -f restaurant/docker-compose.yml stop; docker rm restaurant_frontend_1; docker rmi ${REPO}:${BRANCH_PROD}; docker-compose -f restaurant/docker-compose.yml up -d",
                                             execTimeout: 120000,
                                         )
                                     ]
