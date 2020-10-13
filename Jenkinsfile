@@ -32,7 +32,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {    
-                    if (BRANCH_NAME == BRANCH_PROD) {
+                    if (BRANCH_NAME == BRANCH_DEV) {
                         buildDocker  = docker.build("${REPO}:${GIT_BRANCH}", "-f DockerfileDev") 
                     }else {
                         buildDocker = docker.build("${REPO}:${GIT_BRANCH}")
