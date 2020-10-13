@@ -5,8 +5,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN yarn install
 COPY . .
-ENV VUE_APP_URL $VUE_APP_URL
-ENV VUE_APP_STATIC_URL $VUE_APP_STATIC_URL
+ENV VUE_APP_URL='https://api.arifh.web.id'
+ENV VUE_APP_STATIC_URL='https://api.arifh.web.id'
 RUN yarn build
 EXPOSE 8080
 CMD [ "http-server", "dist" ]
