@@ -31,9 +31,12 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                script {
-                    // CommitHash = sh (script : "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-                    buildDocker = docker.build("${REPO}:${GIT_BRANCH}")
+                script {    
+                    if (BRANCH_NAME == BRANCH_PROD) {
+                        buildDocker  = docker.build("${REPO}:${GIT_BRANCH}", "-f DockerfileDev") 
+                    }else {
+                        buildDocker = docker.build("${REPO}:${GIT_BRANCH}")
+                    }
                 }
             }
         }
@@ -64,7 +67,6 @@ pipeline {
                                     verbose: false,
                                     transfers: [
                                         sshTransfer(
-                                            // execCommand: "docker pull ${REPO}:latest; docker kill ${REPO}; docker run -d --rm --name ${REPO} -p 80:80 ${REPO}:latest",
                                             sourceFiles: "docker-compose.yml",
                                             remoteDirectory: "${REMOTE_DIR}",
                                             execCommand: "docker-compose -f restaurant/docker-compose.yml stop; docker rm restaurant_frontend_1; docker rmi ${REPO}:${BRANCH_DEV}; docker-compose -f restaurant/docker-compose.yml up -d",
@@ -84,7 +86,6 @@ pipeline {
                                         sshTransfer(
                                             sourceFiles: "docker-compose.dev.yml",
                                             remoteDirectory: "${REMOTE_DIR}",
-                                            // execCommand: "docker rmi arifh19/cobatampil:${env.GIT_BRANCH}; docker pull arifh19/cobatampil:${env.GIT_BRANCH}; docker kill cobatampil; docker run -d --rm --name cobatampil -p 80:80 arifh19/cobatampil:${env.GIT_BRANCH}",
                                             execCommand: "docker-compose -f restaurant/docker-compose.dev.yml stop; docker rm restaurant_frontend_1; docker rmi ${REPO}:${BRANCH_DEV}; docker-compose -f restaurant/docker-compose.dev.yml up -d",
                                             execTimeout: 120000,
                                         ),
