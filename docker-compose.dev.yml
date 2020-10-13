@@ -58,8 +58,8 @@ services:
     depends_on:
       - backend
     environment:
-      - VUE_APP_URL=http://api.arifhdev.me
-      - VUE_APP_STATIC_URL=http://api.arifhdev.me/public/upload/
+      - VUE_APP_URL=https://api.arifhdev.me
+      - VUE_APP_STATIC_URL=https://api.arifhdev.me/public/upload/
 
 networks:
   restaurant-network:
