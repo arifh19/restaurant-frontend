@@ -37,6 +37,7 @@ pipeline {
                     }else {
                         buildDocker  = docker.build("${REPO}:${GIT_BRANCH}", "-f Dockerfile ./") 
                     }
+                    sh ('docker rmi $(docker images --filter "dangling=true" -q --no-trunc)')
                 }
             }
         }
