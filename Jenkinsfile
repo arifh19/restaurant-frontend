@@ -35,7 +35,7 @@ pipeline {
                     if (BRANCH_NAME == BRANCH_DEV) {
                         buildDocker  = docker.build("${REPO}:${GIT_BRANCH}", "-f DockerfileDev ./") 
                     }else {
-                        buildDocker = docker.build("${REPO}:${GIT_BRANCH}")
+                        buildDocker  = docker.build("${REPO}:${GIT_BRANCH}", "-f Dockerfile ./") 
                     }
                 }
             }
