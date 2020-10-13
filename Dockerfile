@@ -1,6 +1,6 @@
 FROM node:lts-alpine
 
-RUN yarn install http-server
+RUN yarn add http-server
 WORKDIR /app
 COPY package*.json ./
 RUN yarn install
