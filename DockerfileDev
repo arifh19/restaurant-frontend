@@ -9,5 +9,6 @@ ENV VUE_APP_URL='https://api.arifhdev.me'
 ENV VUE_APP_STATIC_URL='https://api.arifhdev.me/public/upload/'
 RUN yarn build
 VOLUME /dist/public
+VOLUME /dist/log
 EXPOSE 8080
 CMD [ "http-server", "dist"]
