@@ -40,13 +40,14 @@
 
       - name: Send docker-compose.yml to server
         copy:
-          src: "{{dests}}/{{proj}}/docker-compose.dev.yml"
+          src: "{{dests}}/{{proj}}/{{dockercomposeDev}}"
           dest: "{{remote_file}}/{{dockercomposeDev}}"
           owner: "{{user}}"
           group: "{{user}}"
-          mode: 'u+x,g+x'
+          mode: "u+x,g+x"
 
       - name: Run Docker Compose
-        chdir: "{{remote_file}}"
+        args:
+          chdir: "{{remote_file}}"
         command: docker-compose -f {{dockercomposeDev}} up -d
         
